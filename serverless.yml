@@ -1,0 +1,215 @@
+# serverless.yml
+
+service: the-pod-living-backend-api
+# configValidationMode: error
+
+plugins:
+  - serverless-offline
+  # - serverless-vpc-plugin
+provider:
+  name: aws
+  runtime: nodejs14.x
+  stage: dev
+  region: us-east-1
+  profile: "the-pod-living"
+
+# custom:
+#   vpcConfig:
+#     # Whether plugin is enabled. Can be used to selectively disable plugin
+#     # on certain stages or configurations. Defaults to true.
+#     enabled: true
+
+#     cidrBlock: '10.0.0.0/16'
+
+#     # if createNatGateway is a boolean "true", a NAT Gateway and EIP will be provisioned in each zone
+#     # if createNatGateway is a number, that number of NAT Gateways will be provisioned
+#     createNatGateway: 2
+
+#     # When enabled, the DB subnet will only be accessible from the Application subnet
+#     # Both the Public and Application subnets will be accessible from 0.0.0.0/0
+#     createNetworkAcl: false
+
+#     # Whether to create the DB subnet
+#     # createDbSubnet: true
+
+#     # Whether to enable VPC flow logging to an S3 bucket
+#     createFlowLogs: false
+
+#     # Whether to create a bastion host
+#     createBastionHost: false
+#     bastionHostKeyName: MyKey # required if creating a bastion host
+
+#     # Whether to create a NAT instance
+#     createNatInstance: false
+
+#     # Whether to create AWS Systems Manager (SSM) Parameters
+#     createParameters: false
+
+#     # Optionally specify AZs (defaults to auto-discover all availabile AZs)
+#     # zones:
+#     #   - us-east-1a
+#     #   - us-east-1b
+#     #   - us-east-1c
+
+#     # By default, S3 and DynamoDB endpoints will be available within the VPC
+#     # see https://docs.aws.amazon.com/vpc/latest/userguide/vpc-endpoints.html
+#     # for a list of available service endpoints to provision within the VPC
+#     # (varies per region)
+#     # services:
+#     #   - kms
+#     #   - secretsmanager
+
+#     # Optionally specify subnet groups to create. If not provided, subnet groups
+#     # for RDS, Redshift, ElasticCache and DAX will be provisioned.
+#     # subnetGroups:
+#     #   - rds
+
+#     # Whether to export stack outputs so it may be consumed by other stacks
+#     exportOutputs: false
+
+functions:
+  app:
+    handler: index.handler
+    events:
+      - http: ANY /
+      - http: 'ANY {proxy+}'
+    # timeout: 45
+
+  getStatistics:
+    handler: index.handler
+    events:
+      - http:
+          path: /statistics 
+          method: GET
+          cors: true
+
+  uploadPicture:
+    handler: index.handler
+    events:
+      - http:
+          path: /upload 
+          method: POST
+          cors: true
+
+  allUsers:
+    handler: index.handler
+    events:
+      - http:
+          path: /users 
+          method: GET
+          cors: true
+
+  createUser:
+    handler: index.handler
+    events:
+      - http:
+          path: /users 
+          method: POST
+          cors: true
+
+  updateUserProfile:
+    handler: index.handler
+    events:
+      - http:
+          path: /profiles/{proxy+} 
+          method: PUT
+          cors: true
+
+  getUser:
+    handler: index.handler
+    events:
+      - http:
+          path: /users/{proxy+} 
+          method: GET
+          cors: true
+
+  
+
+  login:
+    handler: index.handler
+    events:
+      - http:
+          path: /auth/signin 
+          method: POST
+          cors: true
+
+  createRoom:
+    handler: index.handler
+    events:
+      - http:
+          path: /rooms 
+          method: POST
+          cors: true
+
+  getAllRoom:
+    handler: index.handler
+    events:
+      - http:
+          path: /rooms 
+          method: GET
+          cors: true
+
+  getRoom:
+    handler: index.handler
+    events:
+      - http:
+          path: /rooms/{proxy+} 
+          method: GET
+          cors: true
+
+  updateRoom:
+    handler: index.handler
+    events:
+      - http:
+          path: /rooms/{proxy+} 
+          method: PUT
+          cors: true
+
+  deleteRoom:
+    handler: index.handler
+    events:
+      - http:
+          path: /rooms/{proxy+} 
+          method: DELETE
+          cors: true
+
+  createApplication:
+    handler: index.handler
+    events:
+      - http:
+          path: /applications 
+          method: POST
+          cors: true
+
+  getAllApplications:
+    handler: index.handler
+    events:
+      - http:
+          path: /applications 
+          method: GET
+          cors: true
+
+  getApplications:
+    handler: index.handler
+    events:
+      - http:
+          path: /applications/{proxy+} 
+          method: GET
+          cors: true
+
+  updateApplications:
+    handler: index.handler
+    events:
+      - http:
+          path: /applications/{proxy+} 
+          method: PUT
+          cors: true
+
+  deleteApplication:
+    handler: index.handler
+    events:
+      - http:
+          path: /applications/{proxy+} 
+          method: DELETE
+          cors: true
+  
